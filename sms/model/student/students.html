@@ -1,0 +1,160 @@
+<script type="text/javascript">
+$(function(){
+	//加载数据
+	loadStudentData();
+	//为复选框绑定事件
+	$(".opt_btns input").off();
+	$(".opt_btns input").change(function(){
+		if($(this).prop("checked")){
+			$("#stuTbl :checkbox:visible").prop("checked",true);
+		}else{
+			$("#stuTbl :checkbox:visible").prop("checked",false);
+		}		
+	});
+	//为添加、修改、删除按钮绑定事件
+	$(".opt_btns button").off();
+	$(".opt_btns button").on("click",function(event){
+		var btn = $(this).text();
+		switch(btn){
+			case "添加":
+				$(".tab_content").load("model/student/addStudent.html");
+			break;
+			case "刷新":
+				loadStudentData();
+			break;
+			case "删除":
+				var ids = $("#stuTbl :checkbox:checked").map(function(index,item){
+					return item.value;
+				}).get();
+				$.ajax("",{
+					dataType:"jsonp",
+					jsonp:"jsonp",
+					jsonpCallback:"delHandler",
+					data:{ids:ids}
+				});
+			break;
+			case "修改":
+				var id = $("#stuTbl :checkbox:checked").map(function(index,item){
+					return item.value;
+				}).get(0);
+				if(id){
+					//1、查询（获取）需要修改的学生的信息
+					var stu;
+					$.ajax("model/student/student.json",{
+						dataType:"json",
+						async:false,
+						success:function(data){
+							stu = data;
+						}	
+					});
+					console.log(stu);
+				}else{
+					alert("请选择您需要修改的学生信息");
+				}
+				//2 加载修改学生页面
+				var url = "model/student/updStudent.html"; 
+				$(".tab_content").load(url,function(){
+					//3 初始化修改学生页面
+					$(":input[name='name']").val(stu.name);
+					$(":input[name='grade']").val(stu.grade);
+					//$(":select[name='clazzId']).val(stu.clazzId);
+					
+				});
+				
+				
+			
+			
+			break;
+		}
+			
+		
+	})
+	
+	//}
+	
+	
+	
+	
+});
+
+//删除学生数据
+function delHandler(data){
+	alert(data);
+	loadStudentData();	
+}
+
+function loadStudentData(){
+
+	var url = "model/student/students.js";
+	$.ajax(url,{
+		dataType:"jsonp",
+		jsonp:"jsonp",	
+		jsonpCallback:"loadData"
+	});	
+	$(".opt_btns :checkbox").prop("checked",false);
+	
+}
+
+// 加载学生数据
+function loadData(data){
+	//加载之前清空内容
+	$("tbody").children(":gt(0)").remove();
+	data.forEach(function(item){
+		var newTr = $(".srcTr").clone().removeClass("srcTr");
+		newTr.find(":checkbox").val(item.id);
+		newTr.children().eq(1).text(item.name);
+		newTr.children().eq(2).text(item.clazzName);
+		newTr.children().eq(3).text(item.gender);
+		newTr.children().eq(4).text(item.grade);	
+		$("#stuTbl tbody").append(newTr);
+		
+	});	
+}
+
+
+
+
+
+
+</script>
+<!--学生管理-->
+<div class="inner">
+    <div class="selects">
+        <select name="" id="">
+            <option value="name">姓名</option>
+            <option value="clazz">班级</option>
+            <option value="grade">成绩</option>
+        </select>
+        <input type="text">
+        <input type="submit" value="search">
+    </div>
+    <table id="stuTbl">
+        <thead>
+            <tr>
+                <th>选择</th>
+                <th>姓名</th>
+                <th>班级</th>
+                <th>性别</th>
+                <th>分数</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="srcTr">
+                <td>
+                    <input type="checkbox">
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="opt_btns">
+        <input type="checkbox">
+        <button>添加</button>
+        <button>修改</button>
+        <button>删除</button>
+        <button>刷新</button>
+    </div>
+</div>

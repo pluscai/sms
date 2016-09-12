@@ -1,0 +1,31 @@
+foo1([{
+	"id":2001,
+	"name":"lcy",
+	"workage":"6年",
+	"salary":20000,
+	"grade":"经理"	
+},{
+	"id":2002,
+	"name":"lisi",
+	"workage":"3年",
+	"salary":10000,
+	"grade":"主管"	
+},{
+	"id":2003,
+	"name":"liwu",
+	"workage":"4年",
+	"salary":8000,
+	"grade":"员工"	
+},{
+	"id":2004,
+	"name":"liliu",
+	"workage":"5年",
+	"salary":2000,
+	"grade":"员工"	
+},{
+	"id":2005,
+	"name":"liqi",
+	"workage":"2年",
+	"salary":3000,
+	"grade":"员工"
+}]);

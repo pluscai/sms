@@ -1,0 +1,19 @@
+loadDate([{
+	"id":2001,
+	"className":"web1601",
+	"classNum":"50",
+	"master":"张三",
+	"monitor":"李思"
+},{
+	"id":2002,
+	"className":"web1602",
+	"classNum":"50",
+	"master":"张三",
+	"monitor":"李思"
+},{
+	"id":2003,
+	"className":"web1603",
+	"classNum":"70",
+	"master":"张三",
+	"monitor":"李思"
+}]);

@@ -1,0 +1,99 @@
+
+<script type="text/javascript">
+$(function(){
+	//页面初始化
+	init();
+	//为form表单绑定事件
+	$("form[name='addStuForm']").off();
+	$("form[name='addStuForm']").on("submit",function(event){
+		var name = $("input[name='name']").val();
+		var clazzId = $("select[name='clazzId']").val();
+		var gender = $(":radio[name='gender']").filter(":checked").val();
+		var grade = $("input[name='grade']").val();
+		var obj = {
+			name:name,
+			clazzId:clazzId,
+			gender:gender,
+			grade:grade,
+		}
+		var url = $("form[name='addStuForm']").attr("action");
+		$.ajax(url,{
+			dataType:"jsonp",
+			jsonp:"jsonp",
+			jsonpCallback:"foo",
+			data:obj
+		});
+		//阻止表单提交
+		event.preventDefault();
+		alert("提交成功！");
+	});
+	
+});
+
+//页面初始化函数
+function init(){
+	//为返回添加事件
+	$(".return").off();
+	$(".return").click(function(){
+		$(".tab_content").load("model/student/students.html"+"?time"+new Date().getTime());	
+	});	
+	//加载班级数据
+	var url = "model/clazz/clazz.js";
+	$.ajax(url,function(){
+		dataType:jsonp;
+		jsonp:jsonp;
+		jsonpCallback:loadDate	
+	})	
+}
+function loadDate(data){
+	data.forEach(function(item){
+		var oo = $("<option value='"+item.id+"'>"+item.className+"</option>")
+		$("select[name='clazzId']").append(oo);
+	});
+}
+
+</script>
+<div class="inner">
+	<h2>修改学生</h2>
+    <form action="http://172.16.8.185:8080/sms/addStudent" name="addStuForm">
+	<table>
+    	<tbody>
+        	<tr>
+            	<td>姓名</td>
+                <td>
+                	<input type="text" name="name"/>
+                </td>
+            </tr>
+            <tr>
+            	<td>班级</td>
+                <td>
+                	<select name="clazzId">
+                    	<option value="">请选择</option>
+                        
+                    </select>
+                </td>
+            </tr>
+            <tr>
+            	<td>性别</td>
+                <td>
+                	男<input value="male" type="radio" checked name="gender">
+                    女<input value="female" type="radio" name="gender">
+                </td>
+            </tr>
+            <tr>
+            	<td>分数</td>
+                <td>
+                	<input type="text" name="grade"/>
+                </td>
+            </tr>
+            <tr>
+            	<td colspan="2">
+                <input type="submit" value="保存"/>
+                <input type="reset" value="重置"/>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    </form>
+    <a class="return" href="javascript:void(0);">返回</a>
+</div>
